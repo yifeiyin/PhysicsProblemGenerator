@@ -13,7 +13,7 @@
 int main() {
     
     Problem problems[10];
-    ExportAsMD(problems, "MD.md");
+    ExportAsMD(10, problems, "MD.md");
     
 //    for (int i = 0; i < 10; i++)
 //    {
