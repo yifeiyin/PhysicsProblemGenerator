@@ -155,26 +155,6 @@ public:
         
         fileOut.close();
     }
-    
-    void PrintContinuously()
-    {
-        std::ios_base::fmtflags originalFlags = std::cout.flags();
-        std::cout.precision(3);
-        std::cout << std::fixed;
-        
-        std::cout << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
-                  << std::endl
-                  << "\t| "
-                  << miu_k << "\t| "
-                  << miu_s << "\t| "
-                  << lhype << "\t| "
-                  << theta << "\t| "
-                  << time << "\t| "
-                  << velocity << "\t|"
-                  << std::endl;
-        
-        std::cout.flags(originalFlags);
-    }
 };
 
 #endif /* Problem_h */
