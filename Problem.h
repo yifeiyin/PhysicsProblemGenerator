@@ -14,11 +14,12 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "Mathematic.h"
 
 class Problem
 {
 private:
-    const int decimalSetting = 2;
+    const int PRECISION = 2;
     const double g = 9.8;
     int type = -1;
     double miu_k = 0.0;
@@ -28,44 +29,12 @@ private:
     double time = 0.0;
     double velocity = 0.0;
     
-    double NumG (double min, double max, int deci = -1)
-    {
-        if (deci == -1)
-            deci = decimalSetting;
-        
-        min *= pow(10, deci);
-        max *= pow(10, deci);
-        
-        std::srand((int)std::time(NULL)+rand());
-        
-        double output = rand() % (int)(max - min) + min;
-        output /= pow(10, deci);
-        return output;
-    }
-    
-    double Round (double number, int deci = -1)
-    {
-        if (deci == -1)
-            deci = decimalSetting;
-        
-        double output = number * pow(10, deci);
-        
-        if (output - (int)output >= 0.5)
-            output = (int)output + 1;
-        else
-            output = (int)output;
-        
-        output /= pow(10,deci);
-        
-        return output;
-    }
-    
 public:
     Problem()
     {
-        miu_k = NumG(0, 0.99);
-        miu_s = NumG(miu_k + 0.01, 1);
-        lhype = NumG(20, 100);
+        miu_k = NumG(0, 0.99, PRECISION);
+        miu_s = NumG(miu_k + 0.01, 1, PRECISION);
+        lhype = NumG(20, 100, PRECISION);
         
         theta = atan(miu_s);
         time = sqrt(
@@ -171,7 +140,7 @@ public:
         }
         
         std::ios_base::fmtflags originalFlags = std::cout.flags();
-        fileOut.precision(decimalSetting); // Format the decimal setting
+        fileOut.precision(PRECISION); // Format the decimal setting
         fileOut << std::fixed;
         
         fileOut << counter << ","
