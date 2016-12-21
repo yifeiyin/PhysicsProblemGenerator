@@ -18,7 +18,7 @@
 
 class Problem
 {
-private:
+public:
     const int PRECISION = 2;
     const double g = 9.8;
     int type = -1;
@@ -28,6 +28,7 @@ private:
     double lhype = 0.0;
     double time = 0.0;
     double velocity = 0.0;
+    double acceleration = 0.0;
     
 public:
     Problem()
@@ -42,7 +43,9 @@ public:
                     (0.5 * g * (sin(theta) - miu_k * cos(theta)))
                     );
         velocity = g * (sin(theta) - miu_k * cos(theta)) * time;
+        acceleration = sin(theta) * g - miu_k * cos(theta) * g;
         theta = theta / 3.14159265 * 180;
+        
         SetProblemType();
     }
     
@@ -58,23 +61,28 @@ public:
         }
     }
     
-    void PrintProblem()
+    void PrintProblem(int counter = 0, std::string fileName = "untitled.csv")
     {
+        const bool T = true, F = false;
         if (type == 1)
         {
-            
+            bool flags[7] = {F,F,F,T,T,F,T};
+            ExportAsCsvFile(counter, fileName, flags);
         }
         else if (type == 2)
         {
-            
+            bool flags[7] = {T,F,F,F,F,T,T};
+            ExportAsCsvFile(counter, fileName, flags);
         }
         else if (type == 3)
         {
-            
+            bool flags[7] = {T,F,F,T,F,T,F};
+            ExportAsCsvFile(counter, fileName, flags);
         }
         else if (type == 4)
         {
-            
+            bool flags[7] = {T,F,T,F,T,F,F};
+            ExportAsCsvFile(counter, fileName, flags);
         }
         else
         {
@@ -93,6 +101,7 @@ public:
                   << "theta = " << theta << " deg" << std::endl
                   << "time  = " << time << std::endl
                   << "veloc = " << velocity << std::endl
+                  << "accel = " << acceleration << std::endl
                   << "----------------" << std::endl;
         
         std::ios_base::fmtflags originalFlags = std::cout.flags();
@@ -100,9 +109,9 @@ public:
         std::cout << std::fixed;
         
         std::cout << "Problem: " << std::endl
-                  << "\t| miu_k\t| miu_s\t| lhype\t| theta\t| time\t| velocity\t|"
+                  << "\t| miu_k\t| miu_s\t| lhype\t| theta\t| time\t| velocity\t| accel"
                   << std::endl
-                  << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
+                  << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
                   << std::endl
                   << "\t| "
                   << miu_k << "\t| "
@@ -110,16 +119,24 @@ public:
                   << lhype << "\t| "
                   << theta << "\t| "
                   << time << "\t| "
-                  << velocity << "\t|"
+                  << velocity << "\t| "
+                  << acceleration << "\t|"
                   << std::endl
                   << "\n================\n" << std::endl;
         
         std::cout.flags(originalFlags);
     }
     
-    void ExportAsCsvFile(int counter = 0, std::string fileName = "untitled.csv")
+    void ExportAsCsvFile(int counter = 0, std::string fileName = "untitled.csv", bool * pflag = nullptr)
     {
         bool isFileExist = false;
+        if (pflag == nullptr)
+        {
+            bool flags[7];
+            for(int i = 0; i < 7; i++)
+                flags[i] = true;
+            pflag = flags;
+        }
         
         std::ifstream fileIn;
         fileIn.open(fileName);
@@ -136,44 +153,25 @@ public:
         
         if (!isFileExist) // Add a heading
         {
-            fileOut << "#,miu_k,miu_s,lhype,theta(°),time,velocity\n";
+            fileOut << "#,miu_k,miu_s,lhype,theta(°),time,velocity,acceleration\n";
         }
         
         std::ios_base::fmtflags originalFlags = std::cout.flags();
         fileOut.precision(PRECISION); // Format the decimal setting
         fileOut << std::fixed;
         
-        fileOut << counter << ","
-                << miu_k << ","
-                << miu_s << ","
-                << lhype << ","
-                << theta << ","
-                << time << ","
-                << velocity << "\n";
+        fileOut << counter << ",";
+        if (pflag[0]) fileOut << miu_k; fileOut << ",";
+        if (pflag[1]) fileOut << miu_s; fileOut << ",";
+        if (pflag[2]) fileOut << lhype; fileOut << ",";
+        if (pflag[3]) fileOut << theta; fileOut << ",";
+        if (pflag[4]) fileOut << time; fileOut << ",";
+        if (pflag[5]) fileOut << velocity; fileOut << ",";
+        if (pflag[6]) fileOut << acceleration; fileOut << "\n";
         
         std::cout.flags(originalFlags); // Reset the decimal setting
         
         fileOut.close();
-    }
-    
-    void PrintContinuously()
-    {
-        std::ios_base::fmtflags originalFlags = std::cout.flags();
-        std::cout.precision(3);
-        std::cout << std::fixed;
-        
-        std::cout << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
-                  << std::endl
-                  << "\t| "
-                  << miu_k << "\t| "
-                  << miu_s << "\t| "
-                  << lhype << "\t| "
-                  << theta << "\t| "
-                  << time << "\t| "
-                  << velocity << "\t|"
-                  << std::endl;
-        
-        std::cout.flags(originalFlags);
     }
 };
 
