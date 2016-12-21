@@ -18,7 +18,7 @@
 
 class Problem
 {
-private:
+public:
     const int PRECISION = 2;
     const double g = 9.8;
     int type = -1;

@@ -8,14 +8,18 @@
 
 #include <iostream>
 #include "Problem.h"
+#include "ExportAsMD.h"
 
 int main() {
     
-    for (int i = 0; i < 10; i++)
-    {
-        Problem problem;
-        problem.PrintProblem(i + 1, "exporting7.csv");
-    }
+    Problem problems[10];
+    ExportAsMD(problems, "MD.md");
+    
+//    for (int i = 0; i < 10; i++)
+//    {
+//        Problem problem;
+//        problem.PrintProblem(i + 1, "exporting7.csv");
+//    }
     
     std::cout << "Done.\n";
     
