@@ -10,11 +10,14 @@
 #include "Problem.h"
 
 int main() {
+    
+    std::cout.precision(6);
+    
     for (int i = 0; i < 30; i++)
     {
         Problem problem;
-        if (i == 0) problem.PrintAll();
-        else problem.PrintContinuously();
+        // problem.ExportAsCsvFile(i + 1, "exporting2.csv");
+        problem.PrintAll();
     }
     
     return 0;

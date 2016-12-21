@@ -6,12 +6,14 @@
 //
 //
 
-#ifndef Problem_hpp
-#define Problem_hpp
+#ifndef Problem_h
+#define Problem_h
 
 #include <ctime>
 #include <cmath>
+#include <string>
 #include <iostream>
+#include <fstream>
 
 class Problem
 {
@@ -26,7 +28,7 @@ private:
     double time = 0.0;
     double velocity = 0.0;
     
-    double NumG ( double min, double max, int deci = -1)
+    double NumG (double min, double max, int deci = -1)
     {
         if (deci == -1)
             deci = decimalSetting;
@@ -61,9 +63,9 @@ private:
 public:
     Problem()
     {
-        miu_k = NumG(0,0.99);
-        miu_s = NumG(miu_k+0.01,1);
-        lhype = NumG(20,100);
+        miu_k = NumG(0, 0.99);
+        miu_s = NumG(miu_k + 0.01, 1);
+        lhype = NumG(20, 100);
         
         theta = atan(miu_s);
         time = sqrt(
@@ -113,54 +115,96 @@ public:
     
     void PrintAll()
     {
-        std::cout << "Unrounded numbers: " << std::endl
-        << "miu_k = " << miu_k << std::endl
-        << "miu_s = " << miu_s << std::endl
-        << "lhype = " << lhype << std::endl
-        << "theta = " << theta << " deg" << std::endl
-        << "time  = " << time << std::endl
-        << "veloc = " << velocity << std::endl
-        << "----------------" << std::endl;
         
+        
+        std::cout << "Unrounded numbers: " << std::endl
+                  << "miu_k = " << miu_k << std::endl
+                  << "miu_s = " << miu_s << std::endl
+                  << "lhype = " << lhype << std::endl
+                  << "theta = " << theta << " deg" << std::endl
+                  << "time  = " << time << std::endl
+                  << "veloc = " << velocity << std::endl
+                  << "----------------" << std::endl;
+        
+        std::ios_base::fmtflags originalFlags = std::cout.flags();
         std::cout.precision(3);
         std::cout << std::fixed;
         
         std::cout << "Problem: " << std::endl
-        << "\t| miu_k\t| miu_s\t| lhype\t| theta\t| time\t| velocity\t|"
-        << std::endl
-        << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
-        << std::endl
-        << "\t| "
-        << miu_k << "\t| "
-        << miu_s << "\t| "
-        << lhype << "\t| "
-        << theta << "\t| "
-        << time << "\t| "
-        << velocity << "\t|"
-        << std::endl
-        << "\n================\n" << std::endl;
+                  << "\t| miu_k\t| miu_s\t| lhype\t| theta\t| time\t| velocity\t|"
+                  << std::endl
+                  << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
+                  << std::endl
+                  << "\t| "
+                  << miu_k << "\t| "
+                  << miu_s << "\t| "
+                  << lhype << "\t| "
+                  << theta << "\t| "
+                  << time << "\t| "
+                  << velocity << "\t|"
+                  << std::endl
+                  << "\n================\n" << std::endl;
         
-        std::cout << std::defaultfloat;
+        std::cout.flags(originalFlags);
+    }
+    
+    void ExportAsCsvFile(int counter = 0, std::string fileName = "untitled.csv")
+    {
+        bool isFileExist = false;
+        
+        std::ifstream fileIn;
+        fileIn.open(fileName);
+        
+        if(fileIn.is_open())
+            isFileExist = true;
+        // else
+        //     isFileExist = false;
+        
+        fileIn.close();
+        
+        std::ofstream fileOut;
+        fileOut.open(fileName, std::ios::out | std::ios::app);
+        
+        if (!isFileExist) // Add a heading
+        {
+            fileOut << "#,miu_k,miu_s,lhype,theta(°),time,velocity\n";
+        }
+        
+        std::ios_base::fmtflags originalFlags = std::cout.flags();
+        fileOut.precision(decimalSetting); // Format the decimal setting
+        fileOut << std::fixed;
+        
+        fileOut << counter << ","
+                << miu_k << ","
+                << miu_s << ","
+                << lhype << ","
+                << theta << ","
+                << time << ","
+                << velocity << "\n";
+        
+        std::cout.flags(originalFlags); // Reset the decimal setting
+        
+        fileOut.close();
     }
     
     void PrintContinuously()
     {
+        std::ios_base::fmtflags originalFlags = std::cout.flags();
         std::cout.precision(3);
         std::cout << std::fixed;
         
-        std::cout
-        << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
-        << std::endl
-        << "\t| "
-        << miu_k << "\t| "
-        << miu_s << "\t| "
-        << lhype << "\t| "
-        << theta << "\t| "
-        << time << "\t| "
-        << velocity << "\t|"
-        << std::endl;
+        std::cout << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
+                  << std::endl
+                  << "\t| "
+                  << miu_k << "\t| "
+                  << miu_s << "\t| "
+                  << lhype << "\t| "
+                  << theta << "\t| "
+                  << time << "\t| "
+                  << velocity << "\t|"
+                  << std::endl;
         
-        std::cout << std::defaultfloat;
+        std::cout.flags(originalFlags);
     }
 };
 
