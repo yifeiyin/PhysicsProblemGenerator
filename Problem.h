@@ -22,6 +22,7 @@ public:
     const int PRECISION = 2;
     const double g = 9.8;
     int type = -1;
+    bool flags[7] {};
     double miu_k = 0.0;
     double miu_s = 0.0;
     double theta = 0.0;
@@ -59,36 +60,78 @@ public:
         {
             type = typ;
         }
+        UpdateFlags();
     }
     
-    void PrintProblem(int counter = 0, std::string fileName = "untitled.csv")
+    void UpdateFlags()
     {
         const bool T = true, F = false;
-        if (type == 1)
+        switch (type)
         {
-            bool flags[7] = {F,F,F,T,T,F,T};
-            ExportAsCsvFile(counter, fileName, flags);
-        }
-        else if (type == 2)
-        {
-            bool flags[7] = {T,F,F,F,F,T,T};
-            ExportAsCsvFile(counter, fileName, flags);
-        }
-        else if (type == 3)
-        {
-            bool flags[7] = {T,F,F,T,F,T,F};
-            ExportAsCsvFile(counter, fileName, flags);
-        }
-        else if (type == 4)
-        {
-            bool flags[7] = {T,F,T,F,T,F,F};
-            ExportAsCsvFile(counter, fileName, flags);
-        }
-        else
-        {
-            std::cout << "Unexpected error.\n";
+            case 1:
+            {
+            bool flaags[7] = {F,F,F,T,T,F,T};
+            for (int i = 0; i < 8; i++) flags[i] = flaags[i];
+            break;
+            }
+                
+            case 2:
+            {
+            bool flaags[7] = {T,F,F,T,F,T,F};
+            for (int i = 0; i < 8; i++) flags[i] = flaags[i];
+            break;
+            }
+                
+            case 3:
+            {
+            bool flaags[7] = {T,F,F,T,F,T,F};
+            for (int i = 0; i < 8; i++) flags[i] = flaags[i];
+            break;
+            }
+                
+            case 4:
+            {
+            bool flaags[7] = {T,F,T,F,T,F,F};
+            for (int i = 0; i < 8; i++) flags[i] = flaags[i];
+            break;
+            }
+                
+            default:
+            {
+                std::cout << "Unexcepted error.\n";
+                break;
+            }
         }
     }
+    
+//    void PrintProblem(int counter = 0, std::string fileName = "untitled.csv")
+//    {
+//        const bool T = true, F = false;
+//        if (type == 1)
+//        {
+//            bool flags[7] = {F,F,F,T,T,F,T};
+//            ExportAsCsvFile(counter, fileName, flags);
+//        }
+//        else if (type == 2)
+//        {
+//            bool flags[7] = {T,F,F,F,F,T,T};
+//            ExportAsCsvFile(counter, fileName, flags);
+//        }
+//        else if (type == 3)
+//        {
+//            bool flags[7] = {T,F,F,T,F,T,F};
+//            ExportAsCsvFile(counter, fileName, flags);
+//        }
+//        else if (type == 4)
+//        {
+//            bool flags[7] = {T,F,T,F,T,F,F};
+//            ExportAsCsvFile(counter, fileName, flags);
+//        }
+//        else
+//        {
+//            std::cout << "Unexpected error.\n";
+//        }
+//    }
     
     void PrintAll()
     {
@@ -127,16 +170,9 @@ public:
         std::cout.flags(originalFlags);
     }
     
-    void ExportAsCsvFile(int counter = 0, std::string fileName = "untitled.csv", bool * pflag = nullptr)
+    void ExportAsCsvFile(int counter = 0, std::string fileName = "untitled.csv")
     {
         bool isFileExist = false;
-        if (pflag == nullptr)
-        {
-            bool flags[7];
-            for(int i = 0; i < 7; i++)
-                flags[i] = true;
-            pflag = flags;
-        }
         
         std::ifstream fileIn;
         fileIn.open(fileName);
@@ -161,13 +197,13 @@ public:
         fileOut << std::fixed;
         
         fileOut << counter << ",";
-        if (pflag[0]) fileOut << miu_k; fileOut << ",";
-        if (pflag[1]) fileOut << miu_s; fileOut << ",";
-        if (pflag[2]) fileOut << lhype; fileOut << ",";
-        if (pflag[3]) fileOut << theta; fileOut << ",";
-        if (pflag[4]) fileOut << time; fileOut << ",";
-        if (pflag[5]) fileOut << velocity; fileOut << ",";
-        if (pflag[6]) fileOut << acceleration; fileOut << "\n";
+        if (flags[0]) fileOut << miu_k; fileOut << ",";
+        if (flags[1]) fileOut << miu_s; fileOut << ",";
+        if (flags[2]) fileOut << lhype; fileOut << ",";
+        if (flags[3]) fileOut << theta; fileOut << ",";
+        if (flags[4]) fileOut << time; fileOut << ",";
+        if (flags[5]) fileOut << velocity; fileOut << ",";
+        if (flags[6]) fileOut << acceleration; fileOut << "\n";
         
         std::cout.flags(originalFlags); // Reset the decimal setting
         
