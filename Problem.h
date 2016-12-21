@@ -61,23 +61,28 @@ public:
         }
     }
     
-    void PrintProblem()
+    void PrintProblem(int counter = 0, std::string fileName = "untitled.csv")
     {
+        const bool T = true, F = false;
         if (type == 1)
         {
-            
+            bool flags[7] = {F,F,F,T,T,F,T};
+            ExportAsCsvFile(counter, fileName, flags);
         }
         else if (type == 2)
         {
-            
+            bool flags[7] = {T,F,F,F,F,T,T};
+            ExportAsCsvFile(counter, fileName, flags);
         }
         else if (type == 3)
         {
-            
+            bool flags[7] = {T,F,F,T,F,T,F};
+            ExportAsCsvFile(counter, fileName, flags);
         }
         else if (type == 4)
         {
-            
+            bool flags[7] = {T,F,T,F,T,F,F};
+            ExportAsCsvFile(counter, fileName, flags);
         }
         else
         {
@@ -122,9 +127,16 @@ public:
         std::cout.flags(originalFlags);
     }
     
-    void ExportAsCsvFile(int counter = 0, std::string fileName = "untitled.csv")
+    void ExportAsCsvFile(int counter = 0, std::string fileName = "untitled.csv", bool * pflag = nullptr)
     {
         bool isFileExist = false;
+        if (pflag == nullptr)
+        {
+            bool flags[7];
+            for(int i = 0; i < 7; i++)
+                flags[i] = true;
+            pflag = flags;
+        }
         
         std::ifstream fileIn;
         fileIn.open(fileName);
@@ -148,14 +160,14 @@ public:
         fileOut.precision(PRECISION); // Format the decimal setting
         fileOut << std::fixed;
         
-        fileOut << counter << ","
-                << miu_k << ","
-                << miu_s << ","
-                << lhype << ","
-                << theta << ","
-                << time << ","
-                << velocity << ","
-                << acceleration << "\n";
+        fileOut << counter << ",";
+        if (pflag[0]) fileOut << miu_k; fileOut << ",";
+        if (pflag[1]) fileOut << miu_s; fileOut << ",";
+        if (pflag[2]) fileOut << lhype; fileOut << ",";
+        if (pflag[3]) fileOut << theta; fileOut << ",";
+        if (pflag[4]) fileOut << time; fileOut << ",";
+        if (pflag[5]) fileOut << velocity; fileOut << ",";
+        if (pflag[6]) fileOut << acceleration; fileOut << "\n";
         
         std::cout.flags(originalFlags); // Reset the decimal setting
         

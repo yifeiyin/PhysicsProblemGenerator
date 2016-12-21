@@ -14,7 +14,7 @@ int main() {
     for (int i = 0; i < 10; i++)
     {
         Problem problem;
-        problem.ExportAsCsvFile(i + 1, "exporting4.csv");
+        problem.PrintProblem(i + 1, "exporting7.csv");
     }
     
     std::cout << "Done.\n";
