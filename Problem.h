@@ -28,6 +28,7 @@ private:
     double lhype = 0.0;
     double time = 0.0;
     double velocity = 0.0;
+    double acceleration = 0.0;
     
 public:
     Problem()
@@ -42,7 +43,9 @@ public:
                     (0.5 * g * (sin(theta) - miu_k * cos(theta)))
                     );
         velocity = g * (sin(theta) - miu_k * cos(theta)) * time;
+        acceleration = sin(theta) * g - miu_k * cos(theta) * g;
         theta = theta / 3.14159265 * 180;
+        
         SetProblemType();
     }
     
@@ -93,6 +96,7 @@ public:
                   << "theta = " << theta << " deg" << std::endl
                   << "time  = " << time << std::endl
                   << "veloc = " << velocity << std::endl
+                  << "accel = " << acceleration << std::endl
                   << "----------------" << std::endl;
         
         std::ios_base::fmtflags originalFlags = std::cout.flags();
@@ -100,9 +104,9 @@ public:
         std::cout << std::fixed;
         
         std::cout << "Problem: " << std::endl
-                  << "\t| miu_k\t| miu_s\t| lhype\t| theta\t| time\t| velocity\t|"
+                  << "\t| miu_k\t| miu_s\t| lhype\t| theta\t| time\t| velocity\t| accel"
                   << std::endl
-                  << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
+                  << " \t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+----------\t+"
                   << std::endl
                   << "\t| "
                   << miu_k << "\t| "
@@ -110,7 +114,8 @@ public:
                   << lhype << "\t| "
                   << theta << "\t| "
                   << time << "\t| "
-                  << velocity << "\t|"
+                  << velocity << "\t| "
+                  << acceleration << "\t|"
                   << std::endl
                   << "\n================\n" << std::endl;
         
@@ -136,7 +141,7 @@ public:
         
         if (!isFileExist) // Add a heading
         {
-            fileOut << "#,miu_k,miu_s,lhype,theta(°),time,velocity\n";
+            fileOut << "#,miu_k,miu_s,lhype,theta(°),time,velocity,acceleration\n";
         }
         
         std::ios_base::fmtflags originalFlags = std::cout.flags();
@@ -149,7 +154,8 @@ public:
                 << lhype << ","
                 << theta << ","
                 << time << ","
-                << velocity << "\n";
+                << velocity << ","
+                << acceleration << "\n";
         
         std::cout.flags(originalFlags); // Reset the decimal setting
         
